@@ -1,0 +1,31 @@
+(* Define the client portfolio with ISINs *)
+clientPortfolioISINs = {"ISIN1", "ISIN2", ..., "ISIN100"};  (* Replace with actual ISINs *)
+
+(* Define a base URL for fetching asset data from Interactive Data Services (modify URL as needed) *)
+fetchURL[isin_] := "https://example.com/asset?isin=" <> isin
+
+(* Function to download PDF and extract last traded price and date *)
+fetchAssetData[isin_] := Module[{pdfData, assetPage, lastPrice, lastDate},
+  
+  (* Fetch the asset details page *)
+  assetPage = Import[fetchURL[isin], "HTML"];
+  
+  (* Save a PDF backup of the page for the ISIN *)
+  pdfData = URLSave[fetchURL[isin], isin <> ".pdf"];
+  
+  (* Extract last traded price and last trade date *)
+  (* Assuming the data is accessible with specific HTML tags or classes on the page *)
+  lastPrice = Import[assetPage, {"HTML", "XPath"}, 
+    "XPath" -> "//*[@id='lastPrice']"];
+  lastDate = Import[assetPage, {"HTML", "XPath"}, 
+    "XPath" -> "//*[@id='lastTradeDate']"];
+  
+  (* Return a dataset with ISIN, last price, and date *)
+  <|"ISIN" -> isin, "LastPrice" -> lastPrice, "LastDate" -> lastDate|>
+  ]
+
+(* Iterate over all ISINs and collect data *)
+portfolioData = Table[fetchAssetData[isin], {isin, clientPortfolioISINs}];
+
+(* Save collected data in Excel format *)
+Export["ClientPortfolio_Mercer.xlsx", portfolioData, "XLSX"];

@@ -1,0 +1,49 @@
+(* Define basic conversion rate fetch function *)
+fetchExchangeRate[base_, target_] := 
+ Module[{url, data, rate},
+  url = "https://api.exchangerate-api.com/v4/latest/" <> base;
+  data = Import[url, "RawJSON"];
+  rate = data["rates"][target];
+  rate
+  ]
+
+(* Define a list of vendors with their typical fees *)
+vendors = {
+   "Revolut" -> 0.0025,      (* 0.25% fee *)
+   "Wise" -> 0.0035,         (* 0.35% fee *)
+   "Western Union" -> 0.05,  (* 5% fee *)
+   "Bank Standard" -> 0.01   (* 1% fee *)
+   };
+
+(* Function to calculate final amount after fees based on vendor *)
+calculateConversion[amount_, base_, target_, vendor_] := 
+ Module[{exchangeRate, feeRate, fee, convertedAmount},
+  exchangeRate = fetchExchangeRate[base, target];
+  feeRate = Lookup[vendors, vendor];
+  fee = feeRate * amount * exchangeRate;
+  convertedAmount = amount * exchangeRate - fee;
+  <|"Rate" -> exchangeRate, "Fee" -> fee, "FinalAmount" -> convertedAmount|>
+  ]
+
+(* Interactive currency converter interface *)
+Manipulate[
+ Module[{result},
+  result = calculateConversion[amount, baseCurrency, targetCurrency, vendor];
+  Column[{
+    Style["Currency Converter", Bold, 20],
+    Row[{"Amount in ", baseCurrency, ": ", amount}],
+    Row[{"Conversion Rate (", baseCurrency, " -> ", targetCurrency, 
+      "): ", result["Rate"]}],
+    Row[{"Transaction Fee (", vendor, "): ", result["Fee"]}],
+    Row[{"Final Amount in ", targetCurrency, ": ", 
+      result["FinalAmount"]}]
+    }]
+  ],
+ {{amount, 100}, 1, 10000, 1, Appearance -> "Labeled"},
+ {{baseCurrency, "USD"}, {"USD", "EUR", "GBP", "JPY", "CAD", "AUD"}, 
+  ControlType -> PopupMenu},
+ {{targetCurrency, "EUR"}, {"USD", "EUR", "GBP", "JPY", "CAD", "AUD"}, 
+  ControlType -> PopupMenu},
+ {{vendor, "Revolut"}, Keys[vendors], ControlType -> PopupMenu}
+ ]
+
