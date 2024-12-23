@@ -1,0 +1,16 @@
+Sub Tickers()
+
+'open the file
+Workbooks.Open FileName:="/Users/akashghoshal/Documents/CACX.xlsx"
+
+'Copy tickers
+Workbooks("Tickers.xlsx").Worksheets("Tickers").Range("B2:B100").Copy
+
+'pasting, saving and closing file
+Workbooks("CACX.xlsx").Worksheets("CACX").Range("A1").PasteSpecial Paste:=xlPasteValues
+Workbooks("CACX.xlsx").Close SaveChanges:=True
+
+'Notification
+MsgBox "Tickers has been copied successfully!"
+
+End Sub

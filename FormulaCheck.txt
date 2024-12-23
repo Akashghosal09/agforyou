@@ -1,0 +1,32 @@
+Sub FormulaCheck()
+
+Dim iRow As Integer
+Dim iColumn As Integer
+Dim formulaText As String
+
+On Error GoTo ErrHandler
+    
+    ' Get user input for row and column
+    iRow = InputBox("Enter the row number:")
+    iColumn = InputBox("Enter the column number:")
+    
+    formulaText = Cells(iRow, iColumn).Formula
+
+    If Left(formulaText, 1) = "=" Or Left(formulaText, 1) = "+" Then
+        MsgBox "The cell starts with a formula."
+    Else
+        MsgBox "The cell does not start with a formula."
+    End If
+    
+    ' Check if the cell has a formula
+  '  If Cells(iRow, iColumn).HasFormula Then
+  '      MsgBox "The cell has a formula."
+  '  Else
+  '      MsgBox "The cell does not have a formula."
+  '  End If
+    
+    Exit Sub
+    
+ErrHandler:
+    MsgBox "Error: Invalid input. Please enter valid row and column numbers."
+End Sub

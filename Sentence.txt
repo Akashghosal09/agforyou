@@ -1,0 +1,26 @@
+Sub Sentence()
+
+    Dim bandName As String
+    Dim numCDs As Integer
+    Dim city As String
+    Dim dt As Date
+    Dim price As Integer
+    Dim Curr As String
+    
+
+    ' Get user input
+    bandName = InputBox("Enter the band name:")
+    numCDs = InputBox("Enter the number of CDs published:")
+    city = InputBox("Enter the city:")
+    dt = InputBox("Enter the date (YYYY-MM-DD):")
+    price = InputBox("Enter the ticket price:")
+    Curr = InputBox("Enter the curreny:")
+
+    ' Construct the sentence
+    Dim Sentence As String
+    Sentence = " I love listening to music. My favourite band is " & bandName & ". " & " I have all " & numCDs & " CDs they have published. I am very excited that they are playing concert in " & city & " on " & dt & " Too shame that tickets are expensive, but I believe that it is worth spending " & price & " " & Curr & " per ticket."
+
+    ' Display the sentence
+    MsgBox Sentence
+    
+End Sub

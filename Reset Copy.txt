@@ -1,0 +1,12 @@
+Sub Reset()
+
+'Copy tickers
+Workbooks("Tickers.xlsx").Worksheets("PD").Range("B2:B100").Copy
+
+'pasting, saving and closing file
+Workbooks("Tickers.xlsx").Worksheets("PD").Range("D2").PasteSpecial Paste:=xlPasteValues
+
+'Notification
+MsgBox "File Reset Done!"
+
+End Sub

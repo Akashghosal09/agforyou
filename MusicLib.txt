@@ -1,0 +1,27 @@
+Sub Sentence()
+
+    Dim bandName As String
+    Dim foundRow As Variant
+    Dim lastRow As Long
+    
+
+    ' Get user input
+    bandName = InputBox("Enter the band name:")
+    
+       ' Find the last row with data in column A
+    lastRow = Cells(Rows.Count, "A").End(xlUp).Row
+    
+    ' Search for the band name in column A
+    foundRow = Application.Match(bandName, Range("A1:A" & lastRow), 0)
+    
+    If Not IsError(foundRow) Then
+        ' Band found, display information
+        MsgBox "Band Name: " & Cells(foundRow, "A") & vbCrLf & " CDs Published: " & vbCrLf & Cells(foundRow, "B") & vbCrLf & " Concert City: " & Cells(foundRow, "C") & vbCrLf & " Show date: " & vbCrLf & Cells(foundRow, "D") & vbCrLf & "Ticket Price: " & Cells(foundRow, "E") & " " & Cells(foundRow, "F")
+    
+    Else
+        ' Band not found
+        MsgBox "Band not found in the database."
+    End If
+
+End Sub
+
